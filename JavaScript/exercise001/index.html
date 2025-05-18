@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise - 001</title>
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function Book(title, author, numberOfPages, haveRead) {
+            if (!new.target) {
+                throw Error("You must use the 'new' operator to call the constructor");
+            }
+            this.title = title;
+            this.author = author;
+            this.numberOfPages = numberOfPages;
+            this.haveRead = haveRead;
+            this.info = function () {
+                function getReadInfo() {
+                    if (haveRead) {
+                        return "have read";
+                    } else {
+                        return "not read yet";
+                    }
+                }
+                const reportInfo = `${title} by ${author}, ${numberOfPages} pages, ${getReadInfo()}.`;
+                return reportInfo;
+            }
+        }
+
+        const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, false);
+        console.log(theHobbit.info());
+    </script>
+</body>
+
+</html>
