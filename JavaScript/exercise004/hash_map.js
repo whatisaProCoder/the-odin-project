@@ -25,23 +25,40 @@ export class HashMap {
     }
     return hashCode;
   }
+  #rehash() {
+    const oldBuckets = this.buckets;
+    this.buckets = new Array(this.#capacity);
+    this.#entries = 0;
+
+    for (const bucket of oldBuckets) {
+      if (bucket != undefined) {
+        let temp = bucket.head();
+        while (temp) {
+          const [key, value] = temp.value;
+          this.set(key, value);
+          temp = temp.nextNode;
+        }
+      }
+    }
+  }
   set(key, value) {
-    this.#entries += 1
-    if (this.#capacity * this.#loadFactor < this.#entries) {
+    if (this.#capacity * this.#loadFactor < (this.#entries + 1)) {
       this.#capacity *= 2
+      this.#rehash();
     }
     const index = this.hash(key)
     if (this.buckets[index] === undefined) {
       this.buckets[index] = new LinkedList()
     }
     this.buckets[index].append([key, value])
+    this.#entries += 1
   }
   get(key) {
     const index = this.hash(key)
     if (this.buckets[index] != undefined) {
-      const requiredNode = this.buckets[index].find(key)
-      if (requiredNode != null) {
-        return requiredNode.value[1]
+      const requiredNodeIndex = this.buckets[index].find(key)
+      if (requiredNodeIndex != null) {
+        return this.buckets[index].at(requiredNodeIndex).value[1]
       }
     }
     return null
@@ -56,7 +73,7 @@ export class HashMap {
   remove(key) {
     const index = this.hash(key)
     if (this.buckets[index] != undefined) {
-      const listIndex = this.buckets[index].find([key, this.get(key)])
+      const listIndex = this.buckets[index].find(key)
       if (listIndex != null) {
         this.buckets[index].removeAt(listIndex)
         this.#entries -= 1
@@ -68,12 +85,15 @@ export class HashMap {
   length() {
     let numberOfKeys = 0
     for (const bucket of this.buckets) {
-      numberOfKeys += bucket.size()
+      if (bucket != undefined) {
+        numberOfKeys += bucket.size()
+      }
     }
     return numberOfKeys
   }
   clear() {
-    this.buckets.length = 0
+    this.#entries = 0
+    this.buckets = []
   }
   keys() {
     const allKeys = []

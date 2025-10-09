@@ -104,8 +104,15 @@ export class LinkedList {
   contains(value) {
     let temp = this.#head
     while (temp) {
-      if (temp.value === value) {
-        return true
+      if (Array.isArray(temp.value)) {
+        if (temp.value[0] === value) {
+          return true
+        }
+      }
+      else {
+        if (temp.value === value) {
+          return true
+        }
       }
       temp = temp.nextNode
     }
@@ -115,8 +122,15 @@ export class LinkedList {
     let index = 0
     let temp = this.#head
     while (temp) {
-      if (temp.value === value) {
-        return index
+      if (Array.isArray(temp.value)) {
+        if (temp.value[0] === value) {
+          return index
+        }
+      }
+      else {
+        if (temp.value === value) {
+          return index
+        }
       }
       temp = temp.nextNode
       index += 1
