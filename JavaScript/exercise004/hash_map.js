@@ -50,8 +50,14 @@ export class HashMap {
     if (this.buckets[index] === undefined) {
       this.buckets[index] = new LinkedList()
     }
-    this.buckets[index].append([key, value])
-    this.#entries += 1
+
+    const existingIndex = this.buckets[index].find(key)
+    if (existingIndex != null) {
+      this.buckets[index].at(existingIndex).value[1] = value
+    } else {
+      this.buckets[index].append([key, value])
+      this.#entries += 1
+    }
   }
   get(key) {
     const index = this.hash(key)
