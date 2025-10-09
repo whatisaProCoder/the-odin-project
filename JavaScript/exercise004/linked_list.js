@@ -1,11 +1,11 @@
-class Node {
+export class Node {
   constructor(value) {
     this.value = value
     this.nextNode = null
   }
 }
 
-class LinkedList {
+export class LinkedList {
   #head
   #tail
   #size
@@ -166,17 +166,3 @@ class LinkedList {
     }
   }
 }
-
-// Testing
-const list = new LinkedList();
-
-list.append("dog");
-list.append("cat");
-list.append("parrot");
-list.append("hamster");
-list.append("snake");
-list.append("turtle");
-
-console.log(list.toString());
-
-
